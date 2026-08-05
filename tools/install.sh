@@ -11,7 +11,7 @@ set -euo pipefail
 TARGET="${1:-both}"
 CONTAINER="${2:-jamovi}"
 
-HERE="$(cd "$(dirname "$0")/../jmv-plus" && pwd)"
+HERE="$(cd "$(dirname "$0")/../jmvplus" && pwd)"
 MODULE=jmvplus
 VERSION="$(awk -F': *' '$1 == "Version" { print $2; exit }' "$HERE/DESCRIPTION")"
 ARTIFACT="$HERE/${MODULE}_${VERSION}.jmo"

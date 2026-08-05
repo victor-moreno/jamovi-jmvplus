@@ -12,7 +12,7 @@ OS="${2:-}"
 ARCH="${3:-}"
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-MODULE_DIR="$ROOT/jmv-plus"
+MODULE_DIR="$ROOT/jmvplus"
 MODULE=jmvplus
 VERSION="$(awk -F': *' '$1 == "Version" { print $2; exit }' "$MODULE_DIR/DESCRIPTION")"
 
