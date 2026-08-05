@@ -1,0 +1,12 @@
+---
+name: descriptives
+title: Descriptives
+menuGroup: Exploration
+version: '1.0.0'
+jas: '1.2'
+addonFor: 'jmv::descriptives'
+export: false
+weightsSupport: full
+
+options: []
+...

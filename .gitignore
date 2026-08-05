@@ -1,0 +1,6 @@
+.claude
+.cache
+.tmp
+.venv
+.envrc
+dist

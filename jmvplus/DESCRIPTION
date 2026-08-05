@@ -1,0 +1,10 @@
+Package: jmvplus
+Type: Package
+Title: Extra Statistics for jamovi Descriptives
+Version: 0.1.0
+Authors@R: person("jamovi", "Community", role = c("aut", "cre"), email = "support@jamovi.org")
+Description: Adds the coefficient of variation to jamovi's built-in descriptives analysis and prediction intervals to linear scatterplots.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports: jmvcore (>= 1.0.7), R6, ggplot2

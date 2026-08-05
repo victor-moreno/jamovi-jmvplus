@@ -1,0 +1,12 @@
+---
+name: scat
+title: Scatter Plot
+category: plots
+menuGroup: .
+version: '1.0.0'
+jas: '1.2'
+addonFor: 'scatr::scat'
+export: false
+
+options: []
+...

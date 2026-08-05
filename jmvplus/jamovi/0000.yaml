@@ -1,0 +1,29 @@
+---
+title: jmv-plus - Extra Statistics for Descriptives
+name: jmvplus
+version: 0.1.0
+jms: '1.0'
+authors:
+  - jamovi Community
+description: >-
+  Adds the coefficient of variation to Descriptives and prediction intervals to
+  linear scatterplots.
+analyses:
+  - title: Descriptives
+    name: descriptives
+    ns: jmvplus
+    menuGroup: Exploration
+    menuTitle: Descriptives
+    addonFor: jmv::descriptives
+    category: analyses
+  - title: Scatter Plot
+    name: scat
+    ns: jmvplus
+    menuGroup: .
+    menuTitle: Scatter Plot
+    addonFor: scatr::scat
+    category: plots
+usesNative: true
+minApp: 1.0.8
+
+...

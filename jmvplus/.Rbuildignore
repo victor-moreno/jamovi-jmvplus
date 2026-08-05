@@ -1,0 +1,12 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.git$
+^\.gitignore$
+^\.claude$
+^\.cache$
+^\.tmp$
+^\.venv$
+^\.envrc$
+^jmvplus_[0-9.]+\.tar\.gz$
+^jmvplus\.Rcheck$
+^jmvplus_[0-9.]+\.jmo$

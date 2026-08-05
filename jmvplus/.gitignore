@@ -1,0 +1,14 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.claude
+.cache
+.tmp
+.venv
+.envrc
+*.Rcheck
+*.tar.gz
+*.jmo
+dist
+build
