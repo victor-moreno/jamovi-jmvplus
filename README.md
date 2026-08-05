@@ -22,4 +22,4 @@ Not sure which R version your jamovi bundles? Check **Help -> About** in jamovi.
 
 - `jmvplus/` — R package source (analysis definitions, R code, jamovi UI yaml)
 - `tools/` — build and install helper scripts
-- `dist/` — packaged `.jmo` build output per R version/OS/arch (not tracked in git; attached to releases)
+- `dist/` — packaged `.jmo` build output per R version/OS/arch (also attached to releases)
