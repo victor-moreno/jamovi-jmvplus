@@ -24,31 +24,22 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 MODULE_DIR="$ROOT/jmvplus"
 MODULE=jmvplus
 VERSION="$(awk -F': *' '$1 == "Version" { print $2; exit }' "$MODULE_DIR/DESCRIPTION")"
-R_MINOR="${R_VERSION%.*}"
 REPO="$(cd "$ROOT" && gh repo view --json nameWithOwner -q .nameWithOwner)"
 
-echo ">> building dist/R${R_MINOR} for R $R_VERSION"
+echo ">> building dist/ for R $R_VERSION"
 bash "$ROOT/tools/prepare-jmo.sh" "$R_VERSION" all
 
 TAG="v${VERSION}-R${R_VERSION}"
-STAGE="$(mktemp -d)"
-trap 'rm -rf "$STAGE"' EXIT
-
-for os_dir in "$ROOT/dist/R${R_MINOR}"/*/; do
-  os="$(basename "$os_dir")"
-  for arch_dir in "$os_dir"*/; do
-    arch="$(basename "$arch_dir")"
-    jmo="$arch_dir${MODULE}_${VERSION}.jmo"
-    [ -f "$jmo" ] || { echo "error: missing $jmo" >&2; exit 1; }
-    cp "$jmo" "$STAGE/${MODULE}_${VERSION}_${os}_${arch}.jmo"
-  done
-done
+shopt -s nullglob
+ASSETS=("$ROOT"/dist/"${MODULE}_${VERSION}_R${R_VERSION}"_*.jmo)
+shopt -u nullglob
+[ "${#ASSETS[@]}" -gt 0 ] || { echo "error: no built artifacts found in dist/ for R $R_VERSION" >&2; exit 1; }
 
 echo ">> creating release $TAG on $REPO"
 gh release create "$TAG" \
   --repo "$REPO" \
   --title "$MODULE $VERSION (jamovi / R $R_VERSION)" \
   --notes "$MODULE $VERSION built for jamovi releases bundling R $R_VERSION. Download the .jmo matching your OS, then in jamovi: Modules -> jamovi library -> Sideload." \
-  "$STAGE"/*.jmo
+  "${ASSETS[@]}"
 
 echo ">> done: https://github.com/$REPO/releases/tag/$TAG"

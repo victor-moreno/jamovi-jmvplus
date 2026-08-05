@@ -52,11 +52,10 @@ if unzip -l "$SOURCE" | grep -Eq '\.(so|dylib|dll)$'; then
 fi
 
 prepare_target() {
-  local target_os="$1" target_arch="$2" target_r out_dir out tmp meta
+  local target_os="$1" target_arch="$2" target_r out tmp meta
 
   target_r="${R_VERSION}-${target_arch}"
-  out_dir="$ROOT/dist/R${R_VERSION%.*}/${target_os}/${target_arch}"
-  out="$out_dir/${MODULE}_${VERSION}.jmo"
+  out="$ROOT/dist/${MODULE}_${VERSION}_R${R_VERSION}_${target_os}_${target_arch}.jmo"
   tmp="$(mktemp -d "${TMPDIR:-/tmp}/jmvplus-jmo.XXXXXX")"
 
   unzip -q "$SOURCE" -d "$tmp"
@@ -67,7 +66,7 @@ prepare_target() {
       echo "error: could not set rVersion in $meta" >&2; rm -rf "$tmp"; return 1; }
   done
 
-  mkdir -p "$out_dir"
+  mkdir -p "$ROOT/dist"
   rm -f "$out"
   (
     cd "$tmp"
