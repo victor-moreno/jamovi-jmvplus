@@ -33,7 +33,7 @@ descriptivesClass <- R6::R6Class(
                     suffix <- private$.suffix(grid[i, ])
                     table$addColumn(
                         name = paste0("stat[cv", suffix, "]"), title = "",
-                        type = "text", value = "Coefficient of variation (%)",
+                        type = "text", value = jmvcore::.("Coefficient of variation (%)"),
                         combineBelow = TRUE
                     )
                     for (var in vars) {
@@ -46,7 +46,7 @@ descriptivesClass <- R6::R6Class(
             } else {
                 table$addColumn(
                     name = "stat[cv]", title = "", type = "text",
-                    value = "Coefficient of variation (%)", combineBelow = TRUE
+                    value = jmvcore::.("Coefficient of variation (%)"), combineBelow = TRUE
                 )
                 for (var in vars) {
                     table$addColumn(name = paste0(var, "[cv]"), title = var, type = "number")
@@ -55,7 +55,7 @@ descriptivesClass <- R6::R6Class(
         },
         .initRows = function() {
             table <- self$parent$results$descriptivesT
-            table$addColumn(name = "cv", title = "CV (%)", type = "number")
+            table$addColumn(name = "cv", title = jmvcore::.("CV (%)"), type = "number")
         },
         .populateColumns = function() {
             table <- self$parent$results$descriptives

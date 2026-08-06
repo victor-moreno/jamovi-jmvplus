@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build and install jmv-plus into jamovi desktop and/or a running jamovi Docker
+# Build and install jmvplus into jamovi desktop and/or a running jamovi Docker
 # container.
 #
 #   bash install.sh              both targets, whichever are available
@@ -31,7 +31,7 @@ install_desktop() {
   APP_R="$APP/Contents/Frameworks/R.framework/Versions/Current/Resources/bin/R"
   [ -x "$APP_R" ] || { echo "error: no R inside $APP" >&2; return 1; }
 
-  echo ">> desktop: building jmv-plus for $ARCH using $PD"
+  echo ">> desktop: building jmvplus for $ARCH using $PD"
   cd "$HERE"
 
   LOG="$(mktemp)"
@@ -178,7 +178,7 @@ Rscript --vanilla -e '
     cat("   Prediction-interval smoke test passed\n")
 '
 INCONTAINER
-  echo ">> docker: installed jmv-plus; open Descriptives to verify CV (%) is reported"
+  echo ">> docker: installed jmvplus; open Descriptives to verify CV (%) is reported"
 }
 
 case "$TARGET" in

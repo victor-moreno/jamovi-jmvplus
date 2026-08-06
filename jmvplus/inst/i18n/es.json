@@ -1,0 +1,33 @@
+{
+    "domain": "messages",
+    "locale_data": {
+        "messages": {
+            "": {
+                "domain": "messages",
+                "lang": "es",
+                "plural_forms": "nplurals=2; plural=(n!=1);"
+            },
+            "Adds the coefficient of variation to Descriptives and prediction intervals to linear scatterplots.": [
+                "Añade el coeficiente de variación a Descriptivos y los intervalos de predicción a los diagramas de dispersión lineales."
+            ],
+            "Coefficient of variation (%)": [
+                "Coeficiente de variación (%)"
+            ],
+            "CV (%)": [
+                "CV (%)"
+            ],
+            "Descriptives": [
+                "Descriptivos"
+            ],
+            "Exploration": [
+                "Exploración"
+            ],
+            "jmvplus - Extra Statistics for Descriptives": [
+                "jmvplus - Estadísticas adicionales para Descriptivos"
+            ],
+            "Scatter Plot": [
+                "Diagrama de dispersión"
+            ]
+        }
+    }
+}

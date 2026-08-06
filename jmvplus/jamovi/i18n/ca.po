@@ -1,0 +1,45 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-07-26 12:08:06+01000\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Language: ca\n"
+
+#: package.description
+msgid ""
+"Adds the coefficient of variation to Descriptives and prediction intervals "
+"to linear scatterplots."
+msgstr ""
+"Afegeix el coeficient de variació a Descriptius i intervals de predicció als "
+"diagrames de dispersió lineals."
+
+#: R/descriptives.b.R
+msgid "Coefficient of variation (%)"
+msgstr "Coeficient de variació (%)"
+
+#: R/descriptives.b.R
+msgid "CV (%)"
+msgstr "CV (%)"
+
+#: package/analyses/descriptives.title
+#: package/analyses/descriptives.menuTitle
+#: descriptives/options.title
+msgid "Descriptives"
+msgstr "Descriptius"
+
+#: package/analyses/descriptives.menuGroup
+#: descriptives/options.menuGroup
+msgid "Exploration"
+msgstr "Exploració"
+
+#: package.title
+msgid "jmvplus - Extra Statistics for Descriptives"
+msgstr "jmvplus - Estadístiques addicionals per a Descriptius"
+
+#: package/analyses/scat.title
+#: package/analyses/scat.menuTitle
+#: scat/options.title
+msgid "Scatter Plot"
+msgstr "Diagrama de dispersió"
