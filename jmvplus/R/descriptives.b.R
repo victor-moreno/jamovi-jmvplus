@@ -2,6 +2,19 @@ descriptivesClass <- R6::R6Class(
     "descriptivesClass",
     inherit = descriptivesBase,
     private = list(
+        .tr = function(text) {
+            # jamovi never forwards the options protobuf (incl. `.lang`) to addon
+            # analyses (only to the host), so self$options$translate() -- what
+            # jmvcore::.() uses -- always sees an empty language here. The host's
+            # Options object does receive it, so borrow that instead.
+            lang <- tryCatch(
+                self$parent$options$.__enclos_env__$private$.lang,
+                error = function(e) ""
+            )
+            if (is.null(lang) || lang == "")
+                return(jmvcore::.(text))
+            jmvcore:::createTranslator("jmvplus", lang)$translate(text)
+        },
         .init = function() {
             if (! self$parent$options$sd)
                 return()
@@ -33,7 +46,7 @@ descriptivesClass <- R6::R6Class(
                     suffix <- private$.suffix(grid[i, ])
                     table$addColumn(
                         name = paste0("stat[cv", suffix, "]"), title = "",
-                        type = "text", value = jmvcore::.("Coefficient of variation (%)"),
+                        type = "text", value = private$.tr("Coefficient of variation (%)"),
                         combineBelow = TRUE
                     )
                     for (var in vars) {
@@ -46,7 +59,7 @@ descriptivesClass <- R6::R6Class(
             } else {
                 table$addColumn(
                     name = "stat[cv]", title = "", type = "text",
-                    value = jmvcore::.("Coefficient of variation (%)"), combineBelow = TRUE
+                    value = private$.tr("Coefficient of variation (%)"), combineBelow = TRUE
                 )
                 for (var in vars) {
                     table$addColumn(name = paste0(var, "[cv]"), title = var, type = "number")
@@ -55,7 +68,7 @@ descriptivesClass <- R6::R6Class(
         },
         .initRows = function() {
             table <- self$parent$results$descriptivesT
-            table$addColumn(name = "cv", title = jmvcore::.("CV (%)"), type = "number")
+            table$addColumn(name = "cv", title = private$.tr("CV (%)"), type = "number")
         },
         .populateColumns = function() {
             table <- self$parent$results$descriptives
