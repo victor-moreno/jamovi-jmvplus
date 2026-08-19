@@ -27,6 +27,21 @@
             ],
             "Scatter Plot": [
                 "Diagrama de dispersión"
+            ],
+            "Homogeneity of Variances Test": [
+                "Prueba de homogeneidad de varianzas"
+            ],
+            "Levene's": [
+                "Levene"
+            ],
+            "Fisher's F-test": [
+                "F de Fisher"
+            ],
+            "Independent Samples T-Test": [
+                "Prueba T para muestras independientes"
+            ],
+            "T-Tests": [
+                "Pruebas T"
             ]
         }
     }

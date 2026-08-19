@@ -5,3 +5,7 @@ of variation (CV), reported as a percentage when `Std. deviation` is selected.
 
 It also adds a pink 95% prediction interval to linear scatterplots when `Show
 line` and `Confidence interval` are selected.
+
+It also adds the classical Fisher-Snedecor F-test to the Independent Samples
+T-Test's `Homogeneity test` table, shown as a second row alongside Levene's
+test when `Homogeneity test` is selected.

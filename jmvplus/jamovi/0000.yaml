@@ -23,6 +23,13 @@ analyses:
     menuTitle: Scatter Plot
     addonFor: scatr::scat
     category: plots
+  - title: Independent Samples T-Test
+    name: ttestis
+    ns: jmvplus
+    menuGroup: T-Tests
+    menuTitle: Independent Samples T-Test
+    addonFor: jmv::ttestIS
+    category: analyses
 usesNative: true
 minApp: 1.0.8
 

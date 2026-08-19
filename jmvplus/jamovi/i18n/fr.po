@@ -43,3 +43,26 @@ msgstr "jmvplus - Statistiques supplémentaires pour les statistiques descriptiv
 #: scat/options.title
 msgid "Scatter Plot"
 msgstr "Nuage de points"
+
+#: R/ttestis.b.R
+msgid "Homogeneity of Variances Test"
+msgstr "Test d'homogénéité des variances"
+
+#: R/ttestis.b.R
+msgid "Levene's"
+msgstr "Levene"
+
+#: R/ttestis.b.R
+msgid "Fisher's F-test"
+msgstr "F de Fisher"
+
+#: package/analyses/ttestis.title
+#: package/analyses/ttestis.menuTitle
+#: ttestis/options.title
+msgid "Independent Samples T-Test"
+msgstr "Test T pour échantillons indépendants"
+
+#: package/analyses/ttestis.menuGroup
+#: ttestis/options.menuGroup
+msgid "T-Tests"
+msgstr "Tests T"
