@@ -33,11 +33,19 @@ ttestisClass <- R6::R6Class(
             # the one variant that's proven reliable, so Fisher's results
             # live alongside Levene's on the same row instead of as a
             # second row or a separate table.
-            superTitle <- private$.tr("Fisher's F-test")
-            table$addColumn(name = "fisherF", title = "F", superTitle = superTitle, type = "number")
-            table$addColumn(name = "fisherDf", title = "df", superTitle = superTitle, type = "number")
-            table$addColumn(name = "fisherDf2", title = "df2", superTitle = superTitle, type = "number")
-            table$addColumn(name = "fisherP", title = "p", superTitle = superTitle, type = "number", format = "zto,pvalue")
+            table$setTitle(private$.tr("Homogeneity of Variances Test"))
+
+            leveneTitle <- private$.tr("Levene's")
+            table$getColumn("f")$setSuperTitle(leveneTitle)
+            table$getColumn("df")$setSuperTitle(leveneTitle)
+            table$getColumn("df2")$setSuperTitle(leveneTitle)
+            table$getColumn("p")$setSuperTitle(leveneTitle)
+
+            fisherTitle <- private$.tr("Fisher's F-test")
+            table$addColumn(name = "fisherF", title = "F", superTitle = fisherTitle, type = "number")
+            table$addColumn(name = "fisherDf", title = "df", superTitle = fisherTitle, type = "number")
+            table$addColumn(name = "fisherDf2", title = "df2", superTitle = fisherTitle, type = "number")
+            table$addColumn(name = "fisherP", title = "p", superTitle = fisherTitle, type = "number", format = "zto,pvalue")
         },
         .run = function() {
             if (! self$parent$options$eqv)

@@ -45,6 +45,14 @@ msgid "Scatter Plot"
 msgstr "Nuage de points"
 
 #: R/ttestis.b.R
+msgid "Homogeneity of Variances Test"
+msgstr "Test d'homogénéité des variances"
+
+#: R/ttestis.b.R
+msgid "Levene's"
+msgstr "Levene"
+
+#: R/ttestis.b.R
 msgid "Fisher's F-test"
 msgstr "F de Fisher"
 

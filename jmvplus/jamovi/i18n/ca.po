@@ -45,6 +45,14 @@ msgid "Scatter Plot"
 msgstr "Diagrama de dispersió"
 
 #: R/ttestis.b.R
+msgid "Homogeneity of Variances Test"
+msgstr "Prova d'homogeneïtat de variàncies"
+
+#: R/ttestis.b.R
+msgid "Levene's"
+msgstr "Levene"
+
+#: R/ttestis.b.R
 msgid "Fisher's F-test"
 msgstr "F de Fisher"
 

@@ -28,6 +28,12 @@
             "Scatter Plot": [
                 "Diagrama de dispersió"
             ],
+            "Homogeneity of Variances Test": [
+                "Prova d'homogeneïtat de variàncies"
+            ],
+            "Levene's": [
+                "Levene"
+            ],
             "Fisher's F-test": [
                 "F de Fisher"
             ],

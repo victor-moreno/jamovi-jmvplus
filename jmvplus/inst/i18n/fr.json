@@ -28,6 +28,12 @@
             "Scatter Plot": [
                 "Nuage de points"
             ],
+            "Homogeneity of Variances Test": [
+                "Test d'homogénéité des variances"
+            ],
+            "Levene's": [
+                "Levene"
+            ],
             "Fisher's F-test": [
                 "F de Fisher"
             ],
