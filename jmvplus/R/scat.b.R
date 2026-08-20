@@ -121,8 +121,8 @@ scatClass <- R6::R6Class(
             if ("yName" %in% names(data))
                 yname <- data$yName[1]
 
-            sprintf("%s = %.3f\n%s = %.2f + %.2f*%s",
-                    "r", r, yname, intercept, slope, xname)
+            sprintf("%s = %.3f\n%s = %g + %g*%s",
+                    "r", r, yname, signif(intercept, 2), signif(slope, 2), xname)
         }
     )
 )
