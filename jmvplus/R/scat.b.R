@@ -45,7 +45,7 @@ scatClass <- R6::R6Class(
                         label = stats,
                         hjust = 1.05,
                         vjust = -0.5,
-                        size = 3,
+                        size = 4.5,
                         colour = "grey20"
                     )
                     plot <- plot + annotation
