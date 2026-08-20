@@ -19,53 +19,47 @@ ttestisClass <- R6::R6Class(
             if (! self$parent$options$eqv)
                 return()
 
-            assum <- self$parent$results$assum
-            if (! is.null(assum$get("fisher")))
+            table <- self$parent$results$assum$eqv
+            if ("fisherF" %in% names(table$.__enclos_env__$private$.columns))
                 return()
 
-            # A second row appended directly onto jmv's own Homogeneity table
-            # (assum$eqv, rows: (vars)) breaks jamovi's client-side table
-            # redraw once `vars` shrinks: the client silently drops rows/
-            # columns the compiled jmv schema doesn't declare on some update
-            # paths, though a full remount (e.g. toggling the "Homogeneity
-            # test" checkbox) repaints correctly. A brand-new table has no
-            # such stale schema to conflict with, so it's added as a sibling
-            # of eqv instead of merged into it.
-            table <- jmvcore::Table$new(
-                options = self$parent$options,
-                name = "fisher",
-                title = private$.tr("Fisher's F-test"),
-                rows = 0,
-                clearWith = list("group", "miss"))
-            table$addColumn(name = "name", title = "", type = "text")
-            table$addColumn(name = "f", title = "F", type = "number")
-            table$addColumn(name = "df", title = "df", type = "number")
-            table$addColumn(name = "df2", title = "df2", type = "number")
-            table$addColumn(name = "p", title = "p", type = "number", format = "zto,pvalue")
-
-            assum$add(table)
+            # Both a second row (rowKey beyond what the host's own
+            # "rows: (vars)" table declares) and a brand-new sibling table
+            # were tried here first; both left jamovi's client rendering the
+            # new content unreliably (rows vanishing / never appearing) once
+            # anything beyond the host's own declared row/column set was
+            # involved. Adding columns to jmv's *own* existing rows -- the
+            # same pattern the CV addon already uses on Descriptives -- is
+            # the one variant that's proven reliable, so Fisher's results
+            # live alongside Levene's on the same row instead of as a
+            # second row or a separate table.
+            superTitle <- private$.tr("Fisher's F-test")
+            table$addColumn(name = "fisherF", title = "F", superTitle = superTitle, type = "number")
+            table$addColumn(name = "fisherDf", title = "df", superTitle = superTitle, type = "number")
+            table$addColumn(name = "fisherDf2", title = "df2", superTitle = superTitle, type = "number")
+            table$addColumn(name = "fisherP", title = "p", superTitle = superTitle, type = "number", format = "zto,pvalue")
         },
         .run = function() {
             if (! self$parent$options$eqv)
                 return()
 
-            table <- self$parent$results$assum$get("fisher")
-            if (is.null(table))
-                return()
-
             vars <- self$parent$options$vars
             group <- self$parent$options$group
-            table$deleteRows()
-            if (length(vars) == 0 || is.null(group) || ! (group %in% names(self$data)))
+            if (length(vars) == 0)
                 return()
 
+            table <- self$parent$results$assum$eqv
             listwise <- self$parent$options$miss == "listwise"
 
             for (var in vars) {
-                groups <- private$.groupedValues(var, group, if (listwise) vars else NULL)
+                groups <- if (is.null(group) || ! (group %in% names(self$data)))
+                    NULL
+                else
+                    private$.groupedValues(var, group, if (listwise) vars else NULL)
+
                 fisher <- private$.fisherTest(groups)
-                table$addRow(rowKey = var, values = list(
-                    name = var, f = fisher$f, df = fisher$df1, df2 = fisher$df2, p = fisher$p
+                table$setRow(rowKey = var, values = list(
+                    fisherF = fisher$f, fisherDf = fisher$df1, fisherDf2 = fisher$df2, fisherP = fisher$p
                 ))
             }
         },
