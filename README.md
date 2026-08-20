@@ -4,7 +4,7 @@ A [jamovi](https://www.jamovi.org) module that extends the built-in **Descriptiv
 
 - **Descriptives**: adds the coefficient of variation (CV), reported as a percentage when `Std. deviation` is selected.
 - **Scatter Plot**: adds a pink 95% prediction interval when `Show line` and `Confidence interval` are selected.
-- **Independent Samples T-Test**: adds the classical Fisher-Snedecor F-test as a second row in the `Homogeneity test` table, alongside Levene's test, when `Homogeneity test` is selected.
+- **Independent Samples T-Test**: adds the classical Fisher-Snedecor F-test in its own table alongside Levene's test, when `Homogeneity test` is selected.
 
 Requires jamovi >= 1.0.8.
 
