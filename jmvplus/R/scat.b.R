@@ -44,11 +44,11 @@ scatClass <- R6::R6Class(
                         y = -Inf,
                         label = paste0("\n", stats),
                         hjust = 1.05,
-                        vjust = 2,
+                        vjust = -0.8,
                         size = 4.5,
                         colour = "grey20"
                     )
-                    plot <- plot + annotation + ggplot2::coord_cartesian(clip = "off")
+                    plot <- plot + annotation
                 }
 
                 plot
