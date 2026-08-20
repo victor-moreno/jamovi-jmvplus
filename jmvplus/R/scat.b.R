@@ -12,30 +12,45 @@ scatClass <- R6::R6Class(
             parentPrivate$.scatterPlot <- function(image, ggtheme, theme, ...) {
                 plot <- original(image, ggtheme, theme, ...)
                 interval <- private$.predictionInterval(image$state)
-                if (is.null(interval))
-                    return(plot)
+                stats <- private$.regressionStats(image$state)
 
-                ribbon <- if ("group" %in% names(interval)) {
-                    ggplot2::geom_ribbon(
-                        data = interval,
-                        mapping = ggplot2::aes(x = x, ymin = lwr, ymax = upr, group = group),
-                        inherit.aes = FALSE,
-                        fill = "#F48FB1",
-                        alpha = 0.30,
-                        colour = NA
-                    )
-                } else {
-                    ggplot2::geom_ribbon(
-                        data = interval,
-                        mapping = ggplot2::aes(x = x, ymin = lwr, ymax = upr),
-                        inherit.aes = FALSE,
-                        fill = "#F48FB1",
-                        alpha = 0.30,
-                        colour = NA
-                    )
+                if (!is.null(interval)) {
+                    ribbon <- if ("group" %in% names(interval)) {
+                        ggplot2::geom_ribbon(
+                            data = interval,
+                            mapping = ggplot2::aes(x = x, ymin = lwr, ymax = upr, group = group),
+                            inherit.aes = FALSE,
+                            fill = "#F48FB1",
+                            alpha = 0.30,
+                            colour = NA
+                        )
+                    } else {
+                        ggplot2::geom_ribbon(
+                            data = interval,
+                            mapping = ggplot2::aes(x = x, ymin = lwr, ymax = upr),
+                            inherit.aes = FALSE,
+                            fill = "#F48FB1",
+                            alpha = 0.30,
+                            colour = NA
+                        )
+                    }
+                    plot$layers <- c(list(ribbon), plot$layers)
                 }
 
-                plot$layers <- c(list(ribbon), plot$layers)
+                if (!is.null(stats)) {
+                    annotation <- ggplot2::annotate(
+                        "text",
+                        x = Inf,
+                        y = -Inf,
+                        label = stats,
+                        hjust = 1.05,
+                        vjust = -0.5,
+                        size = 3,
+                        colour = "grey20"
+                    )
+                    plot <- plot + annotation
+                }
+
                 plot
             }
             lockBinding(".scatterPlot", parentPrivate)
@@ -76,6 +91,38 @@ scatClass <- R6::R6Class(
             if (! is.null(group))
                 interval$group <- group
             interval
+        },
+        .regressionStats = function(data) {
+            options <- self$parent$options
+            if (! options$regLine || options$lineMethod != "lm")
+                return(NULL)
+
+            if ("group" %in% names(data))
+                return(NULL)
+
+            clean_data <- data[stats::complete.cases(data[c("x", "y")]), c("x", "y"), drop = FALSE]
+            if (nrow(clean_data) < 3 || length(unique(clean_data$x)) < 2)
+                return(NULL)
+
+            fit <- try(stats::lm(y ~ x, data = clean_data), silent = TRUE)
+            if (inherits(fit, "try-error"))
+                return(NULL)
+
+            r <- stats::cor(clean_data$x, clean_data$y, use = "complete.obs")
+            coef <- stats::coef(fit)
+            intercept <- coef[1]
+            slope <- coef[2]
+
+            xname <- "x"
+            yname <- "y"
+
+            if ("xName" %in% names(data))
+                xname <- data$xName[1]
+            if ("yName" %in% names(data))
+                yname <- data$yName[1]
+
+            sprintf("%s = %.3f\n%s = %.2f + %.2f*%s",
+                    "r", r, yname, intercept, slope, xname)
         }
     )
 )
