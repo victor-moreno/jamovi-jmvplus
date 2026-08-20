@@ -40,11 +40,11 @@ scatClass <- R6::R6Class(
                 if (!is.null(stats)) {
                     annotation <- ggplot2::annotate(
                         "text",
-                        x = -Inf,
+                        x = Inf,
                         y = -Inf,
-                        label = stats,
-                        hjust = -0.1,
-                        vjust = 1.5,
+                        label = paste0("\n", stats),
+                        hjust = 1.05,
+                        vjust = 2,
                         size = 4.5,
                         colour = "grey20"
                     )
