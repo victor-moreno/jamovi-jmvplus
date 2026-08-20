@@ -40,15 +40,15 @@ scatClass <- R6::R6Class(
                 if (!is.null(stats)) {
                     annotation <- ggplot2::annotate(
                         "text",
-                        x = Inf,
+                        x = -Inf,
                         y = -Inf,
                         label = stats,
-                        hjust = 1.05,
-                        vjust = -0.5,
+                        hjust = -0.1,
+                        vjust = 1.5,
                         size = 4.5,
                         colour = "grey20"
                     )
-                    plot <- plot + annotation
+                    plot <- plot + annotation + ggplot2::coord_cartesian(clip = "off")
                 }
 
                 plot
