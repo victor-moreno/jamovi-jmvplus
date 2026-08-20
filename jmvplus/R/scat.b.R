@@ -44,7 +44,7 @@ scatClass <- R6::R6Class(
                         y = -Inf,
                         label = paste0("\n", stats),
                         hjust = 1.05,
-                        vjust = -0.8,
+                        vjust = 1.3,
                         size = 4.5,
                         colour = "grey20"
                     )
