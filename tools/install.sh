@@ -6,6 +6,12 @@
 #   bash install.sh desktop
 #   bash install.sh docker [container]     (default container: jamovi)
 #
+# The desktop target uses whichever R `Rscript` resolves to (respecting
+# ~/.Rprofile, which appends jamovi.app's bundled module library) rather than
+# a custom R_LIBS_USER under ~/R/.Rlib-arm|.Rlib-x64 -- R here is managed by
+# rig, not that path. Pick the active R version with `rig default <version>`
+# before running this if needed; it must match the R version jamovi.app
+# itself bundles, or jmvcore segfaults on load.
 set -euo pipefail
 
 TARGET="${1:-both}"
@@ -18,25 +24,16 @@ ARTIFACT="$HERE/${MODULE}_${VERSION}.jmo"
 
 # ── desktop ──────────────────────────────────────────────────────────────────
 install_desktop() {
-  local ARCH PD APP APP_R LOG
-  ARCH="$(uname -m)"
-  case "$ARCH" in
-    arm64)   PD="$HOME/R/.Rlib-arm" ;;
-    x86_64)  PD="$HOME/R/.Rlib-x64" ;;
-    *)       echo "unsupported architecture: $ARCH" >&2; return 1 ;;
-  esac
-  [ -d "$PD" ] || { echo "error: $PD not found" >&2; return 1; }
-
+  local APP APP_R LOG
   APP=/Applications/jamovi.app
   APP_R="$APP/Contents/Frameworks/R.framework/Versions/Current/Resources/bin/R"
   [ -x "$APP_R" ] || { echo "error: no R inside $APP" >&2; return 1; }
 
-  echo ">> desktop: building jmvplus for $ARCH using $PD"
+  echo ">> desktop: building jmvplus with $(Rscript -e 'cat(R.version.string)')"
   cd "$HERE"
 
   LOG="$(mktemp)"
-  R_ENVIRON_USER=/dev/null R_PROFILE_USER=/dev/null R_LIBS_USER="$PD" \
-    Rscript --vanilla -e 'jmvtools::install()' 2>&1 | tee "$LOG" | grep -vE '^\s*$' || true
+  Rscript -e 'jmvtools::install()' 2>&1 | tee "$LOG" | grep -vE '^\s*$' || true
 
   # jmvtools::install() can report errors on stdout while exiting successfully.
   # It can also claim installation succeeded after a SingletonLock failure.
