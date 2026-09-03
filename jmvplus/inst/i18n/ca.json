@@ -7,14 +7,8 @@
                 "lang": "ca",
                 "plural_forms": "nplurals=2; plural=(n!=1);"
             },
-            "Adds the coefficient of variation to Descriptives and prediction intervals to linear scatterplots.": [
-                "Afegeix el coeficient de variació a Descriptius i intervals de predicció als diagrames de dispersió lineals."
-            ],
-            "Coefficient of variation (%)": [
-                "Coeficient de variació (%)"
-            ],
-            "CV (%)": [
-                "CV (%)"
+            "Adds the coefficient of variation to Descriptives and the classical F-test to the Independent Samples T-Test's homogeneity check.": [
+                ""
             ],
             "Descriptives": [
                 "Descriptius"
@@ -22,23 +16,11 @@
             "Exploration": [
                 "Exploració"
             ],
-            "jmvplus - Extra Statistics for Descriptives": [
-                "jmvplus - Estadístiques addicionals per a Descriptius"
-            ],
-            "Scatter Plot": [
-                "Diagrama de dispersió"
-            ],
-            "Homogeneity of Variances Test": [
-                "Prova d'homogeneïtat de variàncies"
-            ],
-            "Levene's": [
-                "Levene"
-            ],
-            "Fisher's F-test": [
-                "F de Fisher"
-            ],
             "Independent Samples T-Test": [
                 "Prova T per a mostres independents"
+            ],
+            "jmvplus - Extra Statistics for Descriptives": [
+                "jmvplus - Estadístiques addicionals per a Descriptius"
             ],
             "T-Tests": [
                 "Proves T"

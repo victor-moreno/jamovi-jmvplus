@@ -6,8 +6,8 @@ jms: '1.0'
 authors:
   - jamovi Community
 description: >-
-  Adds the coefficient of variation to Descriptives and prediction intervals to
-  linear scatterplots.
+  Adds the coefficient of variation to Descriptives and the classical F-test to
+  the Independent Samples T-Test's homogeneity check.
 analyses:
   - title: Descriptives
     name: descriptives
@@ -16,13 +16,6 @@ analyses:
     menuTitle: Descriptives
     addonFor: jmv::descriptives
     category: analyses
-  - title: Scatter Plot
-    name: scat
-    ns: jmvplus
-    menuGroup: .
-    menuTitle: Scatter Plot
-    addonFor: scatr::scat
-    category: plots
   - title: Independent Samples T-Test
     name: ttestis
     ns: jmvplus

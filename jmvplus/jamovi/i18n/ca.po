@@ -9,19 +9,9 @@ msgstr ""
 
 #: package.description
 msgid ""
-"Adds the coefficient of variation to Descriptives and prediction intervals "
-"to linear scatterplots."
+"Adds the coefficient of variation to Descriptives and the classical F-test "
+"to the Independent Samples T-Test's homogeneity check."
 msgstr ""
-"Afegeix el coeficient de variació a Descriptius i intervals de predicció als "
-"diagrames de dispersió lineals."
-
-#: R/descriptives.b.R
-msgid "Coefficient of variation (%)"
-msgstr "Coeficient de variació (%)"
-
-#: R/descriptives.b.R
-msgid "CV (%)"
-msgstr "CV (%)"
 
 #: package/analyses/descriptives.title
 #: package/analyses/descriptives.menuTitle
@@ -34,33 +24,15 @@ msgstr "Descriptius"
 msgid "Exploration"
 msgstr "Exploració"
 
-#: package.title
-msgid "jmvplus - Extra Statistics for Descriptives"
-msgstr "jmvplus - Estadístiques addicionals per a Descriptius"
-
-#: package/analyses/scat.title
-#: package/analyses/scat.menuTitle
-#: scat/options.title
-msgid "Scatter Plot"
-msgstr "Diagrama de dispersió"
-
-#: R/ttestis.b.R
-msgid "Homogeneity of Variances Test"
-msgstr "Prova d'homogeneïtat de variàncies"
-
-#: R/ttestis.b.R
-msgid "Levene's"
-msgstr "Levene"
-
-#: R/ttestis.b.R
-msgid "Fisher's F-test"
-msgstr "F de Fisher"
-
 #: package/analyses/ttestis.title
 #: package/analyses/ttestis.menuTitle
 #: ttestis/options.title
 msgid "Independent Samples T-Test"
 msgstr "Prova T per a mostres independents"
+
+#: package.title
+msgid "jmvplus - Extra Statistics for Descriptives"
+msgstr "jmvplus - Estadístiques addicionals per a Descriptius"
 
 #: package/analyses/ttestis.menuGroup
 #: ttestis/options.menuGroup

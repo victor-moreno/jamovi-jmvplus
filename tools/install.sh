@@ -142,39 +142,6 @@ Rscript --vanilla -e '
     cat(sprintf("   CV smoke test passed: %.0f%%\n", cv))
 '
 INCONTAINER
-  echo ">> docker: testing prediction interval"
-  docker exec -i "$CONTAINER" bash -s <<'INCONTAINER'
-set -euo pipefail
-Rscript --vanilla -e '
-    .libPaths(c(
-        "/usr/lib/jamovi/modules/scatr/R",
-        "/usr/lib/jamovi/modules/base/R",
-        "/usr/lib/jamovi/modules/jmvplus/R",
-        .libPaths()
-    ))
-    library(scatr)
-    library(jmvplus)
-
-    data <- data.frame(x = 1:8, y = c(1.2, 1.8, 3.5, 3.9, 5.4, 5.8, 7.5, 7.9))
-    analysis <- scatr::scatClass$new(
-        options = scatr::scatOptions$new(
-            x = "x", y = "y", regLine = TRUE, lineSE = TRUE, lineMethod = "lm"
-        ),
-        data = data
-    )
-    analysis$addAddon(jmvplus::scatClass$new(options = jmvplus::scatOptions$new()))
-    analysis$run()
-
-    plot <- analysis$results$plot$plot$fun()
-    ribbon <- plot$layers[[1]]
-    stopifnot(
-        class(ribbon$geom)[1] == "GeomRibbon",
-        identical(ribbon$aes_params$fill, "#F48FB1"),
-        nrow(ggplot2::ggplot_build(plot)$data[[1]]) == 100
-    )
-    cat("   Prediction-interval smoke test passed\n")
-'
-INCONTAINER
   echo ">> docker: installed jmvplus; open Descriptives to verify CV (%) is reported"
 }
 
