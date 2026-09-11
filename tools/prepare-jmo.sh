@@ -1,91 +1,77 @@
 #!/usr/bin/env bash
-# Repackage the current macOS ARM .jmo for a target jamovi R version and CPU.
-# This only rewrites jamovi's compatibility metadata; it does not rebuild R code.
+# Repack a built .jmo into the two CPU artifacts one jamovi series needs.
+# Metadata-only: it rewrites jamovi's compatibility stamp and rebuilds no R code.
 #
-#   bash tools/prepare-jmo.sh 4.6.0 mac arm64
-#   bash tools/prepare-jmo.sh 4.6.0 all
-#   bash tools/prepare-jmo.sh 4.5.3 linux x64 path/to/jmvplus_0.1.0.jmo
+#   bash tools/prepare-jmo.sh current 4.6.0
+#   bash tools/prepare-jmo.sh solid 4.5.0 path/to/jmvplus_0.2.0.jmo
+#
+# TWO artifacts per series cover every operating system. jamovi's only
+# compatibility gate is an exact string compare of the artifact's rVersion
+# against the app's JAMOVI_R_VERSION, and that string carries the R version and
+# the CPU but no OS component -- so the mac/linux/windows matrix this script
+# used to emit was three copies of the same file. See README.md.
+#
+# Safe only for a module with no compiled code; the guard below enforces that.
 set -euo pipefail
 
-R_VERSION="${1:-}"
-OS="${2:-}"
-ARCH="${3:-}"
+SERIES="${1:-}"
+R_VERSION="${2:-}"
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 MODULE_DIR="$ROOT/jmvplus"
-MODULE=jmvplus
+MODULE="$(awk -F': *' '$1 == "Package" { print $2; exit }' "$MODULE_DIR/DESCRIPTION")"
 VERSION="$(awk -F': *' '$1 == "Version" { print $2; exit }' "$MODULE_DIR/DESCRIPTION")"
+SOURCE="${3:-$MODULE_DIR/${MODULE}_${VERSION}.jmo}"
 
-usage() {
-  echo "usage: prepare-jmo.sh R_VERSION {mac|linux|windows} {arm64|x64} [source.jmo]" >&2
-  echo "       prepare-jmo.sh R_VERSION all [source.jmo]" >&2
-}
+usage() { echo "usage: prepare-jmo.sh {solid|current} R_VERSION [source.jmo]" >&2; }
+
+case "$SERIES" in
+  solid|current) ;;
+  *) usage; exit 1 ;;
+esac
 
 case "$R_VERSION" in
   [0-9]*.[0-9]*.[0-9]*) ;;
   *) usage; exit 1 ;;
 esac
 
-if [ "$OS" = "all" ]; then
-  [ -z "$ARCH" ] || { usage; exit 1; }
-  SOURCE="${3:-$MODULE_DIR/${MODULE}_${VERSION}.jmo}"
-else
-  case "$OS" in
-    mac|linux|windows) ;;
-    *) usage; exit 1 ;;
-  esac
-
-  case "$ARCH" in
-    arm64|x64) ;;
-    *) usage; exit 1 ;;
-  esac
-  SOURCE="${4:-$MODULE_DIR/${MODULE}_${VERSION}.jmo}"
-fi
-
 [ -f "$SOURCE" ] || { echo "error: source artifact not found: $SOURCE" >&2; exit 1; }
 command -v unzip >/dev/null || { echo "error: unzip is required" >&2; exit 1; }
 command -v zip >/dev/null || { echo "error: zip is required" >&2; exit 1; }
 
+# A repack cannot fix compiled code: the .so/.dylib/.dll inside would be for the
+# build machine's CPU whatever the stamp claims.
 if unzip -l "$SOURCE" | grep -Eq '\.(so|dylib|dll)$'; then
-  echo "error: $SOURCE contains native libraries and cannot be repackaged safely" >&2
+  echo "error: $SOURCE contains native libraries and cannot be repacked" >&2
   exit 1
 fi
 
-prepare_target() {
-  local target_os="$1" target_arch="$2" target_r out tmp meta
-
-  target_r="${R_VERSION}-${target_arch}"
-  out="$ROOT/dist/${MODULE}_${VERSION}_R${R_VERSION}_${target_os}_${target_arch}.jmo"
-  tmp="$(mktemp -d "${TMPDIR:-/tmp}/jmvplus-jmo.XXXXXX")"
-
-  unzip -q "$SOURCE" -d "$tmp"
-  for meta in "$tmp/$MODULE/jamovi.yaml" "$tmp/$MODULE/jamovi-full.yaml"; do
-    [ -f "$meta" ] || { echo "error: metadata missing from source artifact: $meta" >&2; rm -rf "$tmp"; return 1; }
-    perl -0pi -e "s/^rVersion: .*$/rVersion: $target_r/m" "$meta"
-    grep -qx "rVersion: $target_r" "$meta" || {
-      echo "error: could not set rVersion in $meta" >&2; rm -rf "$tmp"; return 1; }
-  done
-
-  mkdir -p "$ROOT/dist"
-  rm -f "$out"
-  (
-    cd "$tmp"
-    zip -q -r "$out" "$MODULE"
-  )
-  rm -rf "$tmp"
-
-  echo ">> wrote $out"
-  echo ">> compatibility marker: $target_r"
-}
-
-if [ "$OS" = "all" ]; then
-  prepare_target mac arm64
-  prepare_target mac x64
-  prepare_target linux arm64
-  prepare_target linux x64
-  prepare_target windows x64
-else
-  prepare_target "$OS" "$ARCH"
+# The R version in the stamp is a promise about the R the module was BUILT
+# under; R warns "built under R version x.y.z" when an older R loads it. Build
+# against the target series (tools/build-jmo.sh) rather than restamping.
+BUILT="$(unzip -p "$SOURCE" "$MODULE/R/$MODULE/DESCRIPTION" | sed -n 's/^Built: R \([0-9.]*\);.*/\1/p')"
+if [ -n "$BUILT" ] && [ "$BUILT" != "$R_VERSION" ]; then
+  echo "!! warning: $(basename "$SOURCE") was built under R $BUILT but is being" >&2
+  echo "!! stamped for R $R_VERSION. It will load with a warning on the target." >&2
 fi
 
-echo "!! metadata-only repackaging: test each artifact on its target jamovi build"
+mkdir -p "$ROOT/dist"
+
+for ARCH in x64 arm64; do
+  TARGET="${R_VERSION}-${ARCH}"
+  OUT="$ROOT/dist/${MODULE}_${VERSION}_${SERIES}_R${R_VERSION}_${ARCH}.jmo"
+  TMP="$(mktemp -d "${TMPDIR:-/tmp}/${MODULE}-jmo.XXXXXX")"
+
+  unzip -q "$SOURCE" -d "$TMP"
+  for META in "$TMP/$MODULE/jamovi.yaml" "$TMP/$MODULE/jamovi-full.yaml"; do
+    [ -f "$META" ] || { echo "error: metadata missing: $META" >&2; rm -rf "$TMP"; exit 1; }
+    perl -0pi -e "s/^rVersion: .*\$/rVersion: $TARGET/m" "$META"
+    grep -qx "rVersion: $TARGET" "$META" || {
+      echo "error: could not set rVersion in $META" >&2; rm -rf "$TMP"; exit 1; }
+  done
+
+  rm -f "$OUT"
+  ( cd "$TMP" && zip -q -r "$OUT" "$MODULE" )
+  rm -rf "$TMP"
+  echo ">> wrote dist/$(basename "$OUT")  (rVersion: $TARGET)"
+done
