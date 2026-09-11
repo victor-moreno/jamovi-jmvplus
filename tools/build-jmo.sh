@@ -43,4 +43,9 @@ rm -f "$SOURCE"
 "$NODE" "$JMC" --build "$MODULE_DIR" --home "$APP" --jmo "$SOURCE"
 [ -f "$SOURCE" ] || { echo "error: jmc did not produce $SOURCE" >&2; exit 1; }
 
+# jmc copies the R library cache under <module>/build/ into the artifact
+# wholesale, and that cache is reused across builds -- a package renamed in the
+# past leaves its old copy behind and ships silently. List what is bundled.
+echo ">> bundles: $(unzip -l "$SOURCE" | sed -n "s#.*$MODULE/R/\([^/]*\)/DESCRIPTION#\1#p" | sort -u | tr '\n' ' ')"
+
 bash "$ROOT/tools/prepare-jmo.sh" "$SERIES" "$R_VERSION" "$SOURCE"
